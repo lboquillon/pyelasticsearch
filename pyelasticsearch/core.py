@@ -45,15 +45,11 @@ class DataCollection:
 
         return ret
 
-
-
     def __build_collection(self):
 
         if self.total > 0:
             for item in self.__data_obj['hits']['hits']:
                 self.__collection.append(self.__json_to_model(item['_source']))
-
-        print 'Col', self.__collection
 
     @property
     def total(self):
