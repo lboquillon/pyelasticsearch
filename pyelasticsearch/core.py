@@ -8,7 +8,7 @@ class ElasticSearchModel:
         self.__obj = obj
 
     @property
-    def json(self):
+    def object_json_format(self):
         return self.__obj
 
 class DataCollection:
@@ -78,7 +78,7 @@ class ElasticSearch:
     def __init__(self, host, port):
         self.__connection = httplib.HTTPConnection(host, port)
 
-    def __request (self, url, method, body_request):
+    def __request (self, url, method, body_request = None):
         self.__connection.request(method, url, body = body_request)
         response = self.__connection.getresponse()
         return (response.status, response.read())
@@ -94,8 +94,23 @@ class ElasticSearch:
             method = 'POST'
 
         resp, content = self.__request(url, method, document)
-
         return resp
+
+    def refresh(self, index):
+        url = None
+
+        if isinstance(index, list):
+            t = len(inde)
+            url = ''
+            if t > 0:
+                url += index[0]
+
+                for i in range(1, t):
+                    url += ',%s' % index[i]
+        else:
+            url = '/%s/_refresh' % index
+
+        self.__request(url, 'POST')
 
     def query(self, query, index, document_type):
         query.build_query()

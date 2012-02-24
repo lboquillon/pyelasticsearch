@@ -38,6 +38,16 @@ class TermQuery(Query):
     def build_query(self):
         self._query_object = {'term' : {self.__term : self.__value}}
 
+class PrefixQuery(Query):
+
+    def __init__(self, term, value):
+        super(PrefixQuery, self).__init__()
+        self.__term = term
+        self.__value = value
+
+    def build_query(self):
+        self._query_object = {'prefix' : {self.__term : self.__value}}
+
 class TermsQuery(Query):
 
     def __init__(self, term, list_value):
