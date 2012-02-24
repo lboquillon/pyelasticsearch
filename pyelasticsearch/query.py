@@ -10,6 +10,9 @@ class Query(object):
     def get_query(self):
         return json.dumps({ 'query' : self._query_object})
 
+    def get_object_json(self):
+        return json.dumps(self._query_object)
+
     def get_object(self):
         return self._query_object
 
