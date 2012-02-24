@@ -116,3 +116,9 @@ class ElasticSearch:
         query.build_query()
         resp, content = self.__request('/%s/%s/_search/' % (index, document_type), 'GET', query.get_query())
         return DataCollection(content)
+
+    def count(self, query, index, document_type):
+        query.build_query()
+        resp, content = self.__request('/%s/%s/_count/' % (index, document_type), 'GET', query.get_object_json())
+        t = json.loads(content)
+        return t[u'count']
