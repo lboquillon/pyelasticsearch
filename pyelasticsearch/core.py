@@ -1,5 +1,6 @@
 import json
 import query
+import urllib
 import httplib
 
 class ElasticSearchModel:
@@ -83,7 +84,8 @@ class ElasticSearch:
         response = self.__connection.getresponse()
         return (response.status, response.read())
 
-    def index(self, document, index, document_type, document_id = None):
+    def index(self, obj, index, document_type, document_id = None):
+        document = json.dumps(obj)
         url = '/%s/%s' % (index, document_type)
         method = None
 
@@ -117,8 +119,27 @@ class ElasticSearch:
         resp, content = self.__request('/%s/%s/_search/' % (index, document_type), 'GET', query.get_query())
         return DataCollection(content)
 
+
+    def get(self, index, document_type, id, fields = []):
+        url = '/%s/%s/%s' % (index, document_type, id)
+        ret = '_source'
+        flds = ''
+
+        if len(fields) > 0:
+            flds += fields[0]
+
+            for i in range(1, len(fields)):
+                flds += (',%s' % fields[i])
+
+            url += '?%s' % urllib.urlencode({'fields' : flds})
+            ret = 'fields'
+
+        resp, content = self.__request(url, 'GET')
+        obj_json = json.loads(content)
+        return obj_json[ret]
+
     def count(self, query, index, document_type):
         query.build_query()
         resp, content = self.__request('/%s/%s/_count/' % (index, document_type), 'GET', query.get_object_json())
         t = json.loads(content)
-        return t[u'count']
+        return t['count']
