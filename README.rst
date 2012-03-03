@@ -2,12 +2,12 @@
 pyelasticsearch - Minimalist python elasticsearch query library
 =============================
 
+--
 
 Usage mode:
 =============================
 
 >>> obj = {'name' : 'leonardo', 'age' : 20, 'food' : ['rice', 'soda', 'cheese']}
-NameError: name 'ElasticSearch' is not defined
 >>> cnn = core.ElasticSearch('127.0.0.1', 9200)
 >>> cnn.index(obj, 'test', 'people')
 201
